@@ -22,7 +22,8 @@ app = FastAPI()
 
 @app.get(
     path="/",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Home"]
 )
 # Path Operation Function
 def home():
@@ -37,7 +38,8 @@ def home():
 # Path Operation with path Parameters.
 @app.get(
     path="/items/{item_id}",
-    status_code=status.HTTP_202_ACCEPTED
+    status_code=status.HTTP_202_ACCEPTED,
+    tags=["Items"]
 )
 async def read_item(item_id: int):
     """Example route with path parameter.
@@ -54,7 +56,8 @@ async def read_item(item_id: int):
 # Path Operation with optional parameters.
 @app.get(
     path="/cards/{item_id}",
-    status_code=status.HTTP_202_ACCEPTED
+    status_code=status.HTTP_202_ACCEPTED,
+    tags=["Items"]
 )
 async def read_item(item_id: str, q: str | None = None):
     """Example route with optional parameters.
@@ -77,7 +80,8 @@ async def read_item(item_id: str, q: str | None = None):
 @app.post(
     path="/person/new",
     response_model=PersonOut,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    tags=["person"]
 )
 def create_person(person: Person = Body(...)):  # Body(...) obligatory
     """Example Request and Response Body using pydantic BaseModel.
@@ -94,7 +98,8 @@ def create_person(person: Person = Body(...)):  # Body(...) obligatory
 # Validation Query Parameters
 @app.get(
     path="/person/detail",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["person"]
 )
 def show_person(
     name: Optional[str] = Query(
@@ -127,9 +132,12 @@ def show_person(
 # HTTP exception
 person = [1, 2, 3, 4, 5]
 # Validation Path Parameters
+
+
 @app.get(
     path="/person/detail/{person_id}",
-    status_code=status.HTTP_202_ACCEPTED
+    status_code=status.HTTP_202_ACCEPTED,
+    tags=["person"]
 )
 def show_person(
     person_id: int = Path(
@@ -151,7 +159,8 @@ def show_person(
 # Validation Query Parameters with Required
 @app.get(
     path="/parameter/required",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Items"]
 )
 async def read_items(q: str = Query(default=Required, min_length=3)):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
@@ -164,7 +173,8 @@ async def read_items(q: str = Query(default=Required, min_length=3)):
 @app.put(
     path="/person/{person_id}",
     response_model=PersonOut,
-    status_code=status.HTTP_202_ACCEPTED
+    status_code=status.HTTP_202_ACCEPTED,
+    tags=["person"]
 )
 def update_person(
     person_id: int = Path(
@@ -187,7 +197,8 @@ def update_person(
 @app.post(
     path="/login",
     response_model=LoginOut,
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["person"]
 )
 def login(username: str = Form(Required), password: str = Form(Required)):
     return LoginOut(username=username)
@@ -196,7 +207,8 @@ def login(username: str = Form(Required), password: str = Form(Required)):
 # Cookies and Headers Parameters.
 @app.post(
     path="/contact",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Contact"]
 )
 def contact(
     first_name: str = Form(
@@ -222,7 +234,8 @@ def contact(
 
 # Files. type: UploadFile, use File from fastApi.
 @app.post(
-    path="/post-image"
+    path="/post-image",
+    tags=["Files"]
 )
 def post_image(
     image: UploadFile = File(Required)
