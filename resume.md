@@ -35,3 +35,13 @@ To declare a request body, you use Pydantic models with all their power and bene
 * 300: Redirecting.
 * 400: Client Error.
 * 500: Internal Server Error.
+
+## Types Entry Data
+
+* Path Parameters: URL obligatory.
+* Query Parameters: URL optional.
+* Request Body: JSON
+* Forms: inputs frontend.
+* Headers: http headers.
+* Cookies: save data.
+* Files: files like img, txt, video, audio, etc.
