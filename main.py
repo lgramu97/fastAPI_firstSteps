@@ -128,9 +128,12 @@ def update_person(
         gt=0
     ),
     person: Person = Body(Required),
-    location : Location = Body(Required)
+    location: Location = Body(Required)
 ):
     # Union both dict and return
     results = person.dict()
     results.update(location.dict())
     return person
+
+
+# Validation Request Body must be done in the MODEL.
