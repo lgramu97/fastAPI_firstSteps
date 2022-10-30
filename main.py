@@ -2,9 +2,9 @@
 from os import stat
 from typing import Optional
 # FastAPI
-from fastapi import Body, FastAPI, Form, Path, Query, status
+from fastapi import Body, Cookie, FastAPI, Form, Header, Path, Query, status
 # Pydantic
-from pydantic import Required
+from pydantic import EmailStr, Required
 from login import LoginOut
 
 # Custom
@@ -180,3 +180,30 @@ def update_person(
 )
 def login(username: str = Form(Required), password: str = Form(Required)):
     return LoginOut(username=username)
+
+
+#Cookies and Headers Parameters.
+@app.post(
+    path="/contact",
+    status_code=status.HTTP_200_OK
+)
+def contact(
+    first_name : str = Form(
+        Required,
+        max_length=20,
+        min_length=1
+    ),
+    last_name : str = Form(
+        Required,
+        max_length=20,
+        min_length=1
+    ),
+    email : EmailStr = Form(Required),
+    message : str = Form(
+        Required,
+        min_length=20
+    ),
+    user_agent : Optional[str] = Header(default=None),
+    ads : Optional[str] = Cookie(default=None)
+):
+    return user_agent
