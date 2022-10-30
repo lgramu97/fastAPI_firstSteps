@@ -1,5 +1,7 @@
 # FastAPI
-from fastapi import Body, FastAPI
+from typing import Optional
+from fastapi import Body, FastAPI, Query
+from pydantic import Required
 
 from person import Person
 
@@ -7,6 +9,8 @@ from person import Person
 app = FastAPI()
 
 # Path Operatorion Decorator.
+
+
 @app.get("/")
 # Path Operation Function
 def home():
@@ -51,5 +55,40 @@ async def read_item(item_id: str, q: str | None = None):
 
 # Request and Response.
 @app.post("/person/new")
-def create_person(person: Person = Body(...)): # Body(...) obligatory
+def create_person(person: Person = Body(...)):  # Body(...) obligatory
+    """Example Request and Response Body using pydantic BaseModel.
+
+    Args:
+        person (Person, optional): obligatory person. Defaults to Body(...).
+
+    Returns:
+        Person: person object.
+    """
     return person
+
+
+# Validation Query Parameters
+@app.get("/person/detail")
+def show_person(
+    name : Optional[str] = Query(default=None, min_length=1, max_length=50),
+    age : Optional[str] = Query(...) #Obligatory, this is not correct.
+):
+    """Example validation Query Parameters.
+
+    Args:
+        name (Optional[str], optional): person name. Defaults to Query(default=None, min_length=1, max_length=50).
+        age (Optional[str], optional): person age. Defaults to Query(...)#Obligatory.
+
+    Returns:
+        dict: json with the data.
+    """
+    return {name : age}
+
+
+# Validation Query Parameters with Required
+@app.get("/parameter/required")
+async def read_items(q: str = Query(default=Required, min_length=3)):
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
