@@ -1,8 +1,10 @@
 # Python
-from os import stat
 from typing import Optional
 # FastAPI
-from fastapi import Body, Cookie, FastAPI, File, Form, Header, Path, Query, UploadFile, status
+from fastapi import FastAPI
+from fastapi import status
+from fastapi import Body, Cookie,  File, Form, Header, Path, Query, UploadFile
+from fastapi import HTTPException
 # Pydantic
 from pydantic import EmailStr, Required
 from login import LoginOut
@@ -70,6 +72,8 @@ async def read_item(item_id: str, q: str | None = None):
 
 # Here return all the data in Person, but not the password.
 # Request and Response.
+
+
 @app.post(
     path="/person/new",
     response_model=PersonOut,
@@ -120,6 +124,8 @@ def show_person(
     return {name: age}
 
 
+# HTTP exception
+person = [1, 2, 3, 4, 5]
 # Validation Path Parameters
 @app.get(
     path="/person/detail/{person_id}",
@@ -134,6 +140,11 @@ def show_person(
         example=123
     )
 ):
+    if person_id not in person:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The person doesn't exist."
+        )
     return {person_id: "It exists!"}
 
 
@@ -182,29 +193,29 @@ def login(username: str = Form(Required), password: str = Form(Required)):
     return LoginOut(username=username)
 
 
-#Cookies and Headers Parameters.
+# Cookies and Headers Parameters.
 @app.post(
     path="/contact",
     status_code=status.HTTP_200_OK
 )
 def contact(
-    first_name : str = Form(
+    first_name: str = Form(
         Required,
         max_length=20,
         min_length=1
     ),
-    last_name : str = Form(
+    last_name: str = Form(
         Required,
         max_length=20,
         min_length=1
     ),
-    email : EmailStr = Form(Required),
-    message : str = Form(
+    email: EmailStr = Form(Required),
+    message: str = Form(
         Required,
         min_length=20
     ),
-    user_agent : Optional[str] = Header(default=None),
-    ads : Optional[str] = Cookie(default=None)
+    user_agent: Optional[str] = Header(default=None),
+    ads: Optional[str] = Cookie(default=None)
 ):
     return user_agent
 
@@ -214,7 +225,7 @@ def contact(
     path="/post-image"
 )
 def post_image(
-    image : UploadFile = File(Required)
+    image: UploadFile = File(Required)
 ):
     """Example working with files.
 
@@ -225,8 +236,7 @@ def post_image(
         dict: json with the file information.
     """
     return {
-        "Filename" : image.filename,
-        "Format" : image.content_type,
-        "Size(kb)" : round(len(image.file.read())/1024,ndigits=2)
+        "Filename": image.filename,
+        "Format": image.content_type,
+        "Size(kb)": round(len(image.file.read())/1024, ndigits=2)
     }
-    
