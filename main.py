@@ -76,12 +76,14 @@ def show_person(
         min_length=1,
         max_length=50,
         title="Person Name",
-        description="This is the person name."
+        description="This is the person name.",
+        example="Maradona"
     ),
     age: Optional[str] = Query(
         ...,  # Obligatory, this is not correct.
         title="Person age",
-        description="This is the person age."
+        description="This is the person age.",
+        example=62
     )
 ):
     """Example validation query parameters
@@ -103,7 +105,8 @@ def show_person(
         Required,
         gt=0,
         title="Person id",
-        description="This is the person id."
+        description="This is the person id.",
+        example=123
     )
 ):
     return {person_id: "It exists!"}
@@ -125,7 +128,8 @@ def update_person(
         Required,
         title="Person Id.",
         description="This is the person Id",
-        gt=0
+        gt=0,
+        example=123
     ),
     person: Person = Body(Required),
     location: Location = Body(Required)
