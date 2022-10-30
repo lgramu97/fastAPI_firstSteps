@@ -81,16 +81,19 @@ async def read_item(item_id: str, q: str | None = None):
     path="/person/new",
     response_model=PersonOut,
     status_code=status.HTTP_201_CREATED,
-    tags=["person"]
+    tags=["person"],
+    summary="Create person in the app"
 )
 def create_person(person: Person = Body(...)):  # Body(...) obligatory
-    """Example Request and Response Body using pydantic BaseModel.
+    """
+    This path operation creates a person in the app and save information
+    in the database.
 
-    Args:
-        person (Person, optional): obligatory person. Defaults to Body(...).
+    Args:  
+    - **person** (Person, optional): a Person model with all the info.
 
     Returns:
-        Person: person object.
+    - **dict**: return a json with the person model information.
     """
     return person
 
@@ -117,14 +120,15 @@ def show_person(
         example=62
     )
 ):
-    """Example validation query parameters
+    """
+    Example validation query parameters
 
     Args:
-        name (Optional[str], optional): person name. 
-        age (Optional[str], optional): person age. 
+        **name** (Optional[str], optional): person name.   
+        **age** (Optional[str], optional): person age.   
 
     Returns:
-        dict: json with the information-
+        **dict**: json with the information.    
     """
     return {name: age}
 
