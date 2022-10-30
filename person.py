@@ -35,8 +35,13 @@ class Person(BaseModel):
     )
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[str] = Field(default=None)
+    password: str = Field(
+        Required,
+        min_length=8,
+        max_length=16
+    )
 
-    #Create Config file to test endpoints in the API.
+    # Create Config file to test endpoints in the API.
     class Config:
         schema_extra = {
             "example": {
@@ -44,7 +49,28 @@ class Person(BaseModel):
                 "last_name": "Gramuglia",
                 "age": 25,
                 "hair_color": "brown",
-                "is_married": False
-
+                "is_married": False,
+                "password": "12345678"  # WARNING! THIS IS A BIG ERROR.
             }
         }
+
+
+# Response Model (No password)
+class PersonOut(BaseModel):
+    first_name: str = Field(
+        Required,
+        min_length=1,
+        max_length=50,
+    )
+    last_name: str = Field(
+        Required,
+        min_length=1,
+        max_length=50,
+    )
+    age: int = Field(
+        Required,
+        gt=0,
+        lt=115,
+    )
+    hair_color: Optional[HairColor] = Field(default=None)
+    is_married: Optional[str] = Field(default=None)

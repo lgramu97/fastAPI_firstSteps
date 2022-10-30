@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import Body, FastAPI, Path, Query
 from pydantic import Required
 
-from person import Person
+from person import Person, PersonOut
 from location import Location
 
 # Create an instance
@@ -53,9 +53,9 @@ async def read_item(item_id: str, q: str | None = None):
         return {"item_id": item_id, "q": q}
     return {"item_id": item_id}
 
-
+# Here return all the data in Person, but not the password.
 # Request and Response.
-@app.post("/person/new")
+@app.post("/person/new", response_model=PersonOut)
 def create_person(person: Person = Body(...)):  # Body(...) obligatory
     """Example Request and Response Body using pydantic BaseModel.
 
