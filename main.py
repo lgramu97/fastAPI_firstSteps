@@ -1,6 +1,6 @@
 # FastAPI
 from typing import Optional
-from fastapi import Body, FastAPI, Query
+from fastapi import Body, FastAPI, Path, Query
 from pydantic import Required
 
 from person import Person
@@ -70,19 +70,42 @@ def create_person(person: Person = Body(...)):  # Body(...) obligatory
 # Validation Query Parameters
 @app.get("/person/detail")
 def show_person(
-    name : Optional[str] = Query(default=None, min_length=1, max_length=50),
-    age : Optional[str] = Query(...) #Obligatory, this is not correct.
+    name: Optional[str] = Query(
+        default=None,
+        min_length=1,
+        max_length=50,
+        title="Person Name",
+        description="This is the person name."
+    ),
+    age: Optional[str] = Query(
+        ...,  # Obligatory, this is not correct.
+        title="Person age",
+        description="This is the person age."
+    )
 ):
-    """Example validation Query Parameters.
+    """Example validation query parameters
 
     Args:
-        name (Optional[str], optional): person name. Defaults to Query(default=None, min_length=1, max_length=50).
-        age (Optional[str], optional): person age. Defaults to Query(...)#Obligatory.
+        name (Optional[str], optional): person name. 
+        age (Optional[str], optional): person age. 
 
     Returns:
-        dict: json with the data.
+        dict: json with the information-
     """
-    return {name : age}
+    return {name: age}
+
+
+# Validation Path Parameters
+@app.get("/person/detail/{person_id}")
+def show_person(
+    person_id: int = Path(
+        Required,
+        gt=0,
+        title="Person id",
+        description="This is the person id."
+    )
+):
+    return {person_id: "It exists!"}
 
 
 # Validation Query Parameters with Required
