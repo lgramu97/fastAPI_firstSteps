@@ -25,6 +25,10 @@ When you need to send data from a client (let's say, a browser) to your API, you
 
 To declare a request body, you use Pydantic models with all their power and benefits.
 
+## Validations
+* https://pydantic-docs.helpmanual.io/usage/types/#pydantic-types
+
+
 ## Run fastAPI
 * To run fastAPI:  
 
