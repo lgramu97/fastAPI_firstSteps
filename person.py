@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field, Required
 
 # Optional[type expected] or None
 
+
 class HairColor(Enum):
     white = "white"
     brown = "brown"
@@ -34,3 +35,16 @@ class Person(BaseModel):
     )
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[str] = Field(default=None)
+
+    #Create Config file to test endpoints in the API.
+    class Config:
+        schema_extra = {
+            "example": {
+                "first_name": "Lautaro",
+                "last_name": "Gramuglia",
+                "age": 25,
+                "hair_color": "brown",
+                "is_married": False
+
+            }
+        }

@@ -1,8 +1,17 @@
 # Pydantic
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, Required
 
 
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str 
+    city: str = Field(
+        Required,
+        example="Tandil"
+    )
+    state: str = Field(
+        Required,
+        example="Buenos Aires"
+    )
+    country: str = Field(
+        Required,
+        example="Argentina"
+    )
