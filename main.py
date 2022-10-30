@@ -1,8 +1,12 @@
-# FastAPI
+# Python
+from os import stat
 from typing import Optional
-from fastapi import Body, FastAPI, Path, Query
+# FastAPI
+from fastapi import Body, FastAPI, Path, Query, status
+# Pydantic
 from pydantic import Required
 
+# Custom
 from person import Person, PersonOut
 from location import Location
 
@@ -12,7 +16,10 @@ app = FastAPI()
 # Path Operatorion Decorator.
 
 
-@app.get("/")
+@app.get(
+    path="/", 
+    status_code=status.HTTP_200_OK
+    )
 # Path Operation Function
 def home():
     """Main page.
@@ -24,7 +31,10 @@ def home():
 
 
 # Path Operation with path Parameters.
-@app.get("/items/{item_id}")
+@app.get(
+    path="/items/{item_id}",
+    status_code=status.HTTP_202_ACCEPTED
+    )
 async def read_item(item_id: int):
     """Example route with path parameter.
 
@@ -38,7 +48,10 @@ async def read_item(item_id: int):
 
 
 # Path Operation with optional parameters.
-@app.get("/cards/{item_id}")
+@app.get(
+    path="/cards/{item_id}",
+    status_code=status.HTTP_202_ACCEPTED
+    )
 async def read_item(item_id: str, q: str | None = None):
     """Example route with optional parameters.
 
@@ -55,7 +68,11 @@ async def read_item(item_id: str, q: str | None = None):
 
 # Here return all the data in Person, but not the password.
 # Request and Response.
-@app.post("/person/new", response_model=PersonOut)
+@app.post(
+    path="/person/new", 
+    response_model=PersonOut,
+    status_code=status.HTTP_201_CREATED
+    )
 def create_person(person: Person = Body(...)):  # Body(...) obligatory
     """Example Request and Response Body using pydantic BaseModel.
 
@@ -69,7 +86,10 @@ def create_person(person: Person = Body(...)):  # Body(...) obligatory
 
 
 # Validation Query Parameters
-@app.get("/person/detail")
+@app.get(
+    path="/person/detail",
+    status_code=status.HTTP_200_OK
+    )
 def show_person(
     name: Optional[str] = Query(
         default=None,
@@ -99,7 +119,10 @@ def show_person(
 
 
 # Validation Path Parameters
-@app.get("/person/detail/{person_id}")
+@app.get(
+    path="/person/detail/{person_id}",
+    status_code=status.HTTP_202_ACCEPTED
+    )
 def show_person(
     person_id: int = Path(
         Required,
@@ -113,7 +136,10 @@ def show_person(
 
 
 # Validation Query Parameters with Required
-@app.get("/parameter/required")
+@app.get(
+    path="/parameter/required",
+    status_code=status.HTTP_200_OK
+    )
 async def read_items(q: str = Query(default=Required, min_length=3)):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
@@ -122,7 +148,11 @@ async def read_items(q: str = Query(default=Required, min_length=3)):
 
 
 # Validation Request Body (2 jsons)
-@app.put("/person/{person_id}")
+@app.put(
+    path="/person/{person_id}",
+    response_model=PersonOut,
+    status_code=status.HTTP_202_ACCEPTED
+    )
 def update_person(
     person_id: int = Path(
         Required,

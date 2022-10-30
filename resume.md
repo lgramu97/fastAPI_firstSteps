@@ -27,3 +27,11 @@ To declare a request body, you use Pydantic models with all their power and bene
 
 ## Validations
 * https://pydantic-docs.helpmanual.io/usage/types/#pydantic-types
+
+## Status Code HTTP
+* Status code with images :) https://http.cat/
+* 100: Informative.
+* 200: Ok.
+* 300: Redirecting.
+* 400: Client Error.
+* 500: Internal Server Error.
