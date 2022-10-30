@@ -12,3 +12,8 @@
 * Install FastAPI and UVICORN:  
 
         pip install fastapi uvicorn
+
+## Run fastAPI
+* To run fastAPI:  
+
+        uvicorn main:app --reload

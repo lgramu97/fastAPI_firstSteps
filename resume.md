@@ -27,10 +27,3 @@ To declare a request body, you use Pydantic models with all their power and bene
 
 ## Validations
 * https://pydantic-docs.helpmanual.io/usage/types/#pydantic-types
-
-
-## Run fastAPI
-* To run fastAPI:  
-
-        uvicorn main:app --reload
-
