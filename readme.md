@@ -1,4 +1,4 @@
-# FastAPI Platzi 
+# FastAPI - Firsts Steps
 
 ## Configuration
 * Create virtual enviroment:  
