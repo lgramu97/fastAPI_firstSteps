@@ -2,7 +2,7 @@
 from os import stat
 from typing import Optional
 # FastAPI
-from fastapi import Body, Cookie, FastAPI, Form, Header, Path, Query, status
+from fastapi import Body, Cookie, FastAPI, File, Form, Header, Path, Query, UploadFile, status
 # Pydantic
 from pydantic import EmailStr, Required
 from login import LoginOut
@@ -207,3 +207,26 @@ def contact(
     ads : Optional[str] = Cookie(default=None)
 ):
     return user_agent
+
+
+# Files. type: UploadFile, use File from fastApi.
+@app.post(
+    path="/post-image"
+)
+def post_image(
+    image : UploadFile = File(Required)
+):
+    """Example working with files.
+
+    Args:
+        image (UploadFile, optional): _description_. Defaults to File(Required).
+
+    Returns:
+        dict: json with the file information.
+    """
+    return {
+        "Filename" : image.filename,
+        "Format" : image.content_type,
+        "Size(kb)" : round(len(image.file.read())/1024,ndigits=2)
+    }
+    
