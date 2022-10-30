@@ -4,6 +4,7 @@ from fastapi import Body, FastAPI, Path, Query
 from pydantic import Required
 
 from person import Person
+from location import Location
 
 # Create an instance
 app = FastAPI()
@@ -115,3 +116,21 @@ async def read_items(q: str = Query(default=Required, min_length=3)):
     if q:
         results.update({"q": q})
     return results
+
+
+# Validation Request Body
+@app.put("/person/{person_id}")
+def update_person(
+    person_id: int = Path(
+        Required,
+        title="Person Id.",
+        description="This is the person Id",
+        gt=0
+    ),
+    person: Person = Body(Required),
+    location : Location = Body(Required)
+):
+    # Union both dict and return
+    results = person.dict()
+    results.update(location.dict())
+    return person
