@@ -102,7 +102,8 @@ def create_person(person: Person = Body(...)):  # Body(...) obligatory
 @app.get(
     path="/person/detail",
     status_code=status.HTTP_200_OK,
-    tags=["person"]
+    tags=["person"],
+    deprecated=True
 )
 def show_person(
     name: Optional[str] = Query(
@@ -136,8 +137,6 @@ def show_person(
 # HTTP exception
 person = [1, 2, 3, 4, 5]
 # Validation Path Parameters
-
-
 @app.get(
     path="/person/detail/{person_id}",
     status_code=status.HTTP_202_ACCEPTED,
