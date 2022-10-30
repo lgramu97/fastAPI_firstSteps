@@ -2,13 +2,15 @@
 from os import stat
 from typing import Optional
 # FastAPI
-from fastapi import Body, FastAPI, Path, Query, status
+from fastapi import Body, FastAPI, Form, Path, Query, status
 # Pydantic
 from pydantic import Required
+from login import LoginOut
 
 # Custom
 from person import Person, PersonOut
 from location import Location
+
 
 # Create an instance
 app = FastAPI()
@@ -17,9 +19,9 @@ app = FastAPI()
 
 
 @app.get(
-    path="/", 
+    path="/",
     status_code=status.HTTP_200_OK
-    )
+)
 # Path Operation Function
 def home():
     """Main page.
@@ -34,7 +36,7 @@ def home():
 @app.get(
     path="/items/{item_id}",
     status_code=status.HTTP_202_ACCEPTED
-    )
+)
 async def read_item(item_id: int):
     """Example route with path parameter.
 
@@ -51,7 +53,7 @@ async def read_item(item_id: int):
 @app.get(
     path="/cards/{item_id}",
     status_code=status.HTTP_202_ACCEPTED
-    )
+)
 async def read_item(item_id: str, q: str | None = None):
     """Example route with optional parameters.
 
@@ -69,10 +71,10 @@ async def read_item(item_id: str, q: str | None = None):
 # Here return all the data in Person, but not the password.
 # Request and Response.
 @app.post(
-    path="/person/new", 
+    path="/person/new",
     response_model=PersonOut,
     status_code=status.HTTP_201_CREATED
-    )
+)
 def create_person(person: Person = Body(...)):  # Body(...) obligatory
     """Example Request and Response Body using pydantic BaseModel.
 
@@ -89,7 +91,7 @@ def create_person(person: Person = Body(...)):  # Body(...) obligatory
 @app.get(
     path="/person/detail",
     status_code=status.HTTP_200_OK
-    )
+)
 def show_person(
     name: Optional[str] = Query(
         default=None,
@@ -122,7 +124,7 @@ def show_person(
 @app.get(
     path="/person/detail/{person_id}",
     status_code=status.HTTP_202_ACCEPTED
-    )
+)
 def show_person(
     person_id: int = Path(
         Required,
@@ -139,7 +141,7 @@ def show_person(
 @app.get(
     path="/parameter/required",
     status_code=status.HTTP_200_OK
-    )
+)
 async def read_items(q: str = Query(default=Required, min_length=3)):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
@@ -152,7 +154,7 @@ async def read_items(q: str = Query(default=Required, min_length=3)):
     path="/person/{person_id}",
     response_model=PersonOut,
     status_code=status.HTTP_202_ACCEPTED
-    )
+)
 def update_person(
     person_id: int = Path(
         Required,
@@ -170,4 +172,11 @@ def update_person(
     return person
 
 
-# Validation Request Body must be done in the MODEL.
+# Working with Forms.
+@app.post(
+    path="/login",
+    response_model=LoginOut,
+    status_code=status.HTTP_200_OK
+)
+def login(username: str = Form(Required), password: str = Form(Required)):
+    return LoginOut(username=username)
