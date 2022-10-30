@@ -118,7 +118,7 @@ async def read_items(q: str = Query(default=Required, min_length=3)):
     return results
 
 
-# Validation Request Body
+# Validation Request Body (2 jsons)
 @app.put("/person/{person_id}")
 def update_person(
     person_id: int = Path(
